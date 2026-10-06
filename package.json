@@ -1,0 +1,22 @@
+{
+  "name": "pizza-cat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A small, forkable character engine for animated GitHub profile SVGs. Food may escape.",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "generate": "tsx scripts/generate.ts",
+    "preview": "tsx scripts/preview.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "check": "npm run typecheck && npm test && npm run generate"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "fast-xml-parser": "^5.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

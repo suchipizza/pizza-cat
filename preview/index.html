@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>pizza-cat · the rehearsal room</title>
+  <style>
+    :root { color-scheme: light; --ink: #302b3c; --muted: #726b7c; --line: #ded7cb; --paper: #f6f2e9; --orange: #b65d32; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: ui-sans-serif, system-ui, sans-serif; }
+    main { max-width: 1180px; margin: auto; padding: 30px 40px 60px; }
+    nav { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 24px; gap: 16px; }
+    .brand { font: 700 20px ui-monospace, monospace; letter-spacing: -1px; }
+    .brand span { color: var(--orange); }
+    .eyebrow { font: 11px ui-monospace, monospace; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; }
+    a { color: inherit; text-underline-offset: 4px; }
+    .intro { display: flex; align-items: end; justify-content: space-between; margin: 48px 0 30px; gap: 30px; }
+    h1 { font-size: clamp(32px, 4.3vw, 54px); line-height: 1.05; letter-spacing: -2px; margin: 14px 0; font-weight: 650; }
+    h1 em { font-family: Georgia, serif; font-weight: 400; color: var(--orange); }
+    p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+    .intro p { max-width: 330px; }
+    .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; border: 1px solid var(--line); padding: 12px; border-radius: 12px; margin-bottom: 24px; background: #fff9; }
+    button { font: 12px ui-monospace, monospace; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 7px; padding: 10px 14px; cursor: pointer; }
+    button:hover { border-color: var(--orange); }
+    button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+    input[type=range] { accent-color: var(--orange); flex: 1; min-width: 90px; }
+    output { font: 12px ui-monospace, monospace; min-width: 100px; }
+    .size { font: 11px ui-monospace, monospace; color: var(--muted); margin-left: auto; }
+    .scene { margin: 0 0 30px; }
+    .scene-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .scene-header h2 { font-size: 13px; margin: 0; font-weight: 600; }
+    .scene-header span { font: 11px ui-monospace, monospace; color: var(--muted); }
+    .mount { border-radius: 16px; overflow: hidden; line-height: 0; }
+    .mount svg { width: 100%; height: auto; }
+    .foot { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; border-top: 1px solid var(--line); padding-top: 24px; }
+    .foot h3 { font: 12px ui-monospace, monospace; }
+    .foot p { font-size: 13px; }
+    code { font: 12px ui-monospace, monospace; color: var(--ink); }
+    #status { color: #4c755d; font: 11px ui-monospace, monospace; }
+    #error { white-space: pre-wrap; background: #ffe4dc; color: #812f20; padding: 18px; border-radius: 10px; line-height: 1.5; }
+    @media(max-width:650px) { main { padding: 22px 18px; } nav .eyebrow { display: none; } .intro { display: block; margin-top: 32px; } .foot { grid-template-columns: 1fr; gap: 0; } .size { width: 100%; margin: 2px 0; } }
+  </style>
+</head>
+<body>
+<main>
+  <nav><div class="brand">pizza<span>-</span>cat <span>↗</span></div><span class="eyebrow">The rehearsal room / local preview</span><a href="https://github.com/suchipizza/pizza-cat">Repository ↗</a></nav>
+  <div class="intro"><div><span class="eyebrow">Your profile deserves a main character</span><h1>Small cast.<br><em>Big personality.</em></h1></div><p>Two roommates. A suspicious amount of airborne food. Make yourself at home, then make it your own.</p></div>
+  <div class="toolbar" aria-label="Animation controls">
+    <button id="play" aria-pressed="true">Pause</button><button id="restart">Restart ↺</button>
+    <input id="scrub" type="range" min="0" max="18" step="0.05" value="0" aria-label="Animation time in seconds">
+    <output id="time" for="scrub">0.0 / 18s</output><span class="size" id="size">Loading canvas…</span>
+  </div>
+  <div id="error" role="alert" hidden></div>
+  <figure class="scene"><figcaption class="scene-header"><h2>01 / After hours</h2><span>Dark palette · <a href="/dist/scene.svg">open SVG</a></span></figcaption><div class="mount" id="dark"></div></figure>
+  <figure class="scene"><figcaption class="scene-header"><h2>02 / Day shift</h2><span>Light palette · <a href="/dist/scene-light.svg">open SVG</a></span></figcaption><div class="mount" id="light"></div></figure>
+  <div class="foot">
+    <div><h3>01 — Give them character</h3><p>Edit <code>profile.config.ts</code> for colors, cast, and choreography. Save to watch your changes appear.</p></div>
+    <div><h3>02 — A little pixel magic</h3><p>Copy <code>characters/_template/</code>, draw your frames, and register your new roommate.</p></div>
+    <div><h3>03 — Ready for the README</h3><p>The generated SVG carries the animation itself. Commit <code>dist/</code> and copy the embed from the README.</p><span id="status" role="status">Connecting…</span></div>
+  </div>
+</main>
+<script>
+  // Preview-only JavaScript. Generated SVGs contain no scripts.
+  const $ = id => document.getElementById(id);
+  let svgs = [], playing = !matchMedia('(prefers-reduced-motion: reduce)').matches, version = -1, loading = false, duration = 18, loops = true;
+  function state() { $('play').textContent = playing ? 'Pause' : 'Play'; $('play').setAttribute('aria-pressed', String(playing)); }
+  async function load() {
+    const sources = await Promise.all(['/dist/scene.svg', '/dist/scene-light.svg'].map(async url => { const response = await fetch(url); if (!response.ok) throw Error('Scene unavailable. Check the terminal.'); return response.text(); }));
+    sources.forEach((source, i) => { $(i ? 'light' : 'dark').innerHTML = source; });
+    svgs = ['dark', 'light'].map(id => $(id).querySelector('svg'));
+    const box = svgs[0].viewBox.baseVal;
+    duration = Number(svgs[0].dataset.duration);
+    loops = svgs[0].dataset.loop === 'true';
+    $('size').textContent = `${box.width} × ${box.height} px · SMIL`;
+    $('scrub').max = duration;
+    for (const svg of svgs) { svg.setCurrentTime(0); if (!playing) svg.pauseAnimations(); }
+    state();
+  }
+  $('play').onclick = () => { playing = !playing; for (const svg of svgs) playing ? svg.unpauseAnimations() : svg.pauseAnimations(); state(); };
+  $('restart').onclick = () => { for (const svg of svgs) svg.setCurrentTime(0); };
+  $('scrub').oninput = () => { for (const svg of svgs) svg.setCurrentTime(Number($('scrub').value)); };
+  function tick() {
+    const raw = svgs[0] ? svgs[0].getCurrentTime() : 0;
+    const time = loops ? raw % duration : Math.min(raw, duration);
+    if (document.activeElement !== $('scrub')) $('scrub').value = time;
+    $('time').textContent = `${time.toFixed(1)} / ${duration}s`;
+    requestAnimationFrame(tick);
+  }
+  async function poll() {
+    if (loading) return;
+    loading = true;
+    try {
+      const status = await (await fetch('/status')).json();
+      $('error').hidden = !status.error; $('error').textContent = status.error;
+      $('status').textContent = status.error ? 'Fix the error above and save again.' : status.rebuilding ? 'Rehearsing your changes…' : 'Watching config + assets. All systems tiny.';
+      if (status.version !== version) { await load(); version = status.version; }
+    } catch (error) { $('status').textContent = error.message; }
+    finally { loading = false; }
+  }
+  state(); tick(); poll(); setInterval(poll, 1000);
+</script>
+</body>
+</html>
