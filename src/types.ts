@@ -61,7 +61,13 @@ export interface ProfileConfig {
   readonly theme: { readonly dark: SceneTheme; readonly light: SceneTheme };
   readonly title: string;
   readonly description: string;
-  readonly scene: { readonly duration: number; readonly loop: boolean; readonly label?: string };
+  readonly scene: {
+    readonly duration: number;
+    readonly loop: boolean;
+    readonly label?: string;
+    readonly eyebrow?: string;
+    readonly showTiming?: boolean;
+  };
   readonly characters: readonly ActorInstance[];
   readonly props: readonly ActorInstance[];
 }

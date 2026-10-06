@@ -44,6 +44,6 @@ The interactive preview's JavaScript is local development tooling. It never beco
 - One motion path per actor. Multiple curve segments and key-point timing cover the demo and common flight paths.
 - Linear numeric interpolation and discrete switches. No easing curves yet.
 - Palette roles are arbitrary, and colors are hex values. Custom drawing uses pixel grids rather than raw SVG snippets.
-- The husky example is a palette study using the demo dog. A distinctive husky is a future asset, not a renderer feature.
+- The husky example uses a separate original character asset with no species-specific renderer changes.
 
 The code and artwork were created for this project. The general README-animation concept is inspired by YourTomo; its implementation and assets are not used.

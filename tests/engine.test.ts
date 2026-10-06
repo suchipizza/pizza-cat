@@ -4,11 +4,12 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import profile from '../profile.config.ts';
+import profile from '../examples/demo/profile.config.ts';
 import { characters } from '../characters/index.ts';
 import { props } from '../props/index.ts';
 import template from '../characters/_template/character.ts';
 import alternate from '../examples/husky-cat-food/profile.config.ts';
+import personal from '../examples/noemie-profile/profile.config.ts';
 import { defineProfile } from '../src/config.ts';
 import { delay, fade, frameSwap, loop, motionPath, parallel, rotate, scale, sequence, translate } from '../src/animation.ts';
 import { compileTimeline, animationDuration } from '../src/timeline.ts';
@@ -141,6 +142,26 @@ test('props support scale, opacity, frame switching, rotation, and curved paths 
   assert.equal(XMLValidator.validate(svg), true);
   assert.match(svg, /type="scale"/); assert.match(svg, /path="M 0 0 Q 100 -50 200 0"/);
   validateProfile(alternate, registry);
+});
+
+test('the personal scene renders its custom husky, cat, and five independent food flights', () => {
+  validateDefinition(characters['husky']!);
+  const svg = renderScene(personal, registry);
+  assert.equal(XMLValidator.validate(svg), true);
+  assert.match(svg, /id="actor-husky"/);
+  assert.match(svg, /id="actor-cat"/);
+  assert.equal((svg.match(/<animateMotion /g) ?? []).length, 5);
+  assert.match(svg, /AI-NATIVE SOFTWARE BUILDER \/ ZÜRICH/);
+  assert.doesNotMatch(svg, /20s \/ LOOP/);
+  assert.ok(Buffer.byteLength(svg) < 500_000);
+  for (const actor of personal.characters) {
+    const definition = registry.characters[actor.preset]!;
+    const tracks = compileTimeline(actor.animation, personal.scene.duration, definition.defaultFrame);
+    for (const channel of ['translate', 'scale', 'frame']) {
+      const track = tracks.find(candidate => candidate.channel === channel);
+      if (track) assert.deepEqual(track.values[0], track.values.at(-1), `${actor.id} ${channel} should return to its opening state`);
+    }
+  }
 });
 
 test('non-looping scenes play once and keep their final values', () => {

@@ -1,15 +1,15 @@
-# Husky + cat + food: a palette study
+# Husky + cat + food
 
-This example demonstrates white-and-charcoal dog colors, a smaller black cat, independent flying food, and a sushi prop that switches between maki and nigiri mid-flight.
+A complete 20-second scene with an original black-and-white husky, the smaller black cat, and five independently spinning flights of pizza, maki, and nigiri. The husky has pointed black ears, charcoal crown markings, a white face and muzzle, blue eyes, and a curled tail. It chases the food, looks up, and walks home. The cat blinks, flicks its tail, and hops toward passing sushi.
 
-It reuses the original demo sprites. The demo dog is a floppy-eared dog, **not a finished Siberian husky**. A husky with crown markings, pointed ears, a white muzzle, and a curled tail should be a new character asset. The renderer already supports it.
+All character design lives in `characters/husky/`; the cat keeps its existing sprites. Paths, timing, and reactions live in this configuration. The character renderer needs no species-specific changes.
 
-Generate the example into its own folder:
+Generate into a separate folder:
 
 ```sh
 npm run generate -- --config examples/husky-cat-food/profile.config.ts --out /tmp/pizza-cat-example
 ```
 
-Open the generated `scene.svg` in your browser. To use this as your starting scene, copy its configuration into `profile.config.ts`, adjust the relative imports, and run `npm run preview`.
+Open the generated `scene.svg` in your browser. To make it your default scene, copy this config into `profile.config.ts`, change the source imports to `./src/…`, and replace the demo import with `./examples/demo/profile.config.ts`. Then run `npm run preview`.
 
-The point of the example is composition: a new appearance and a second sushi frame require configuration changes, not renderer changes.
+For a working personal profile, see [Noémie’s scene](../noemie-profile).

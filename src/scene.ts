@@ -10,10 +10,10 @@ export function renderScenery(config: ProfileConfig, theme: SceneTheme): string 
   return `<rect ${attrs({ width, height, rx: 16, fill: theme.background })}/>
 <rect ${attrs({ x: 1, y: 1, width: width - 2, height: height - 2, rx: 15, fill: 'none', stroke: theme.ground })}/>
 <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace">
-<text ${attrs({ x: inset, y: 40, fill: theme.accent, 'font-size': 10, 'letter-spacing': 2 })}>A SMALL SCENE. A WHOLE PERSONALITY.</text>
+<text ${attrs({ x: inset, y: 40, fill: theme.accent, 'font-size': 10, 'letter-spacing': 2 })}>${escapeXml(config.scene.eyebrow ?? 'A SMALL SCENE. A WHOLE PERSONALITY.')}</text>
 <text ${attrs({ x: inset, y: 77, fill: theme.foreground, 'font-size': 30, 'font-weight': 700, 'letter-spacing': -1 })}>${escapeXml(config.title)}</text>
 <text ${attrs({ x: inset, y: height - 20, fill: theme.muted, 'font-size': 10, 'letter-spacing': 1 })}>${escapeXml(config.scene.label ?? 'FORK IT. MAKE IT YOURS.')}</text>
-<text ${attrs({ x: width - inset, y: height - 20, 'text-anchor': 'end', fill: theme.accent, 'font-size': 10 })}>${config.scene.duration}s / ${config.scene.loop ? 'LOOP' : 'ONCE'}</text>
+${config.scene.showTiming === false ? '' : `<text ${attrs({ x: width - inset, y: height - 20, 'text-anchor': 'end', fill: theme.accent, 'font-size': 10 })}>${config.scene.duration}s / ${config.scene.loop ? 'LOOP' : 'ONCE'}</text>`}
 </g>
 <g ${attrs({ fill: theme.ground })}>${stars.map(([x, y]) => `<path d="M${width * x!} ${groundY * y!}h4v-4h4v4h4v4h-4v4h-4v-4h-4z"/>`).join('')}</g>
 <path ${attrs({ d: `M${inset} ${groundY + 3}H${width - inset}`, stroke: theme.ground, 'stroke-width': 2 })}/>

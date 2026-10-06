@@ -236,7 +236,8 @@ Create a definition in `props/`, register it in `props/index.ts`, and add an ins
 ## Examples
 
 - [Default scene](profile.config.ts): two characters, walking, blinking, looking up, independent flying pizza and sushi, and a seamless return home.
-- [Husky + cat + food palette study](examples/husky-cat-food): a white-and-charcoal dog, black cat, and sushi frame switching. Uses demo anatomy; a distinctive husky is a future custom sprite.
+- [Husky + cat + food](examples/husky-cat-food): an original black-and-white husky, the black cat, and five independent pizza, maki, and nigiri flights.
+- [Noémie’s profile scene](examples/noemie-profile): the husky/cat cast with a personal header and a live profile built from this template.
 - [Character starter](characters/_template): a small original creature with a working blink and full customization instructions.
 
 Generate a separate example without overwriting the demo:
